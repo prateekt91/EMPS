@@ -1,5 +1,7 @@
 package com.prat.apiintegrationservice.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 public class TemperatureResponse {
@@ -7,6 +9,7 @@ public class TemperatureResponse {
     // [{"parameter":"t_2m:C","coordinates":[{"lat":13.081568,"lon":77.625137,"dates":[{"date":"2024-10-21T00:00:00Z","value":22.2}]}]}]
 
     private String version;
+    @JsonIgnore
     private String user;
     private String dateGenerated;
     private String status;
@@ -15,7 +18,7 @@ public class TemperatureResponse {
     public TemperatureResponse() {
     }
 
-    public class Data {
+    public static class Data {
 
         private String parameter;
         private List<Coordinate> coordinates;
@@ -23,25 +26,25 @@ public class TemperatureResponse {
         public Data() {
         }
 
-        public class Coordinate {
+        public static class Coordinate {
 
-            private String lat;
-            private String lon;
+            private double lat;
+            private double lon;
             private List<PosData> dates;
 
-            public String getLat() {
+            public double getLat() {
                 return lat;
             }
 
-            public void setLat(String lat) {
+            public void setLat(double lat) {
                 this.lat = lat;
             }
 
-            public String getLon() {
+            public double getLon() {
                 return lon;
             }
 
-            public void setLon(String lon) {
+            public void setLon(double lon) {
                 this.lon = lon;
             }
 
@@ -54,7 +57,7 @@ public class TemperatureResponse {
             }
         }
 
-        public class PosData {
+        public static class PosData {
 
             private String date;
             private String value;

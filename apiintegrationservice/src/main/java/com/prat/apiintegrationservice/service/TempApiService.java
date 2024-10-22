@@ -1,8 +1,10 @@
 package com.prat.apiintegrationservice.service;
 
-import com.prat.apiintegrationservice.model.TemperatureResponse;
+import com.prat.apiintegrationservice.model.Temperature;
 
 public interface TempApiService {
 
-    String getCurrentTempurature(double lat, double lon);
+    Temperature getCurrentTempurature(double lat, double lon);
+
+    Temperature getTemperatureFromService(double lat, double lon);
 }
