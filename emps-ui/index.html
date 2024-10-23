@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geocoding Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f7f7f7;
+            border: 1px solid #ddd;
+            font-size: 1.1em;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Find Location Data by Coordinates</h1>
+
+
+        <button onclick="getLocation()">Find</button>
+
+        <div class="output" id="output"></div>
+        <div class="location" id="location"></div>
+    </div>
+
+    <script>
+        async function getLocationData(lat, lon) {
+            // const lat = document.getElementById('latitude').value;
+            // const lon = document.getElementById('longitude').value;
+        
+            const url = `http://localhost:8080/api/v1/env/getdata?lat=${lat}&lon=${lon}`;
+
+            const response = await fetch(url);
+            const resp = await response.json();
+
+        const outputDiv = document.getElementById('output');
+
+        // Function to display weather data
+        
+            outputDiv.innerHTML = ""; // Clear previous output
+
+            // Loop through the weather data and match it with latitude and longitude
+            resp.data.forEach(item => {
+                const parameter = item.parameter;
+                const dataLat = item.coordinates[0].lat;
+                const dataLon = item.coordinates[0].lon;
+
+                // Check if the lat/lon match the user's location (for demonstration purposes)
+                if (Math.abs(dataLat - lat) < 0.1 && Math.abs(dataLon - lon) < 0.1) {
+                    const value = item.coordinates[0].dates[0].value;
+
+                    // Create a new div to display the key-value pair
+                    const entryDiv = document.createElement('div');
+                    entryDiv.textContent = `${parameter}: ${value}`;
+
+                    // Append it to the output div
+                    outputDiv.appendChild(entryDiv);
+                }
+            });
+        }
+        
+
+        // Function to get the user's location
+        function getLocation() {
+            const outputDiv = document.getElementById('location');
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition, showError);
+            } else {
+                outputDiv.textContent = "Geolocation is not supported by this browser.";
+            }
+        }
+
+        // Callback function to handle success
+        function showPosition(position) {
+            const outputDiv = document.getElementById('location');
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            outputDiv.textContent = `Latitude: ${lat}, Longitude: ${lon}`;
+            
+            // Display weather data based on the user's location
+            getLocationData(lat, lon);
+        }
+
+        // Callback function to handle errors
+        function showError(error) {
+            const outputDiv = document.getElementById('output');
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    outputDiv.textContent = "User denied the request for Geolocation.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    outputDiv.textContent = "Location information is unavailable.";
+                    break;
+                case error.TIMEOUT:
+                    outputDiv.textContent = "The request to get user location timed out.";
+                    break;
+                case error.UNKNOWN_ERROR:
+                    outputDiv.textContent = "An unknown error occurred.";
+                    break;
+            }
+        }
+         
+    </script>
+</body>
+</html>

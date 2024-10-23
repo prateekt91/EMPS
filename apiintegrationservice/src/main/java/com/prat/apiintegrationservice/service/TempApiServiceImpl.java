@@ -45,7 +45,7 @@ public class TempApiServiceImpl implements TempApiService {
     }
 
     @Override
-    public WeatherData getTemperatureFromService(double lat, double lon) {
+    public WeatherAPIResponse getTemperatureFromService(double lat, double lon) {
 
         String methodName = "TempApiServiceImpl.getTemperatureFromService";
         log.info("Inside method {} ", methodName);
@@ -65,8 +65,9 @@ public class TempApiServiceImpl implements TempApiService {
         if (null != response.getBody()) {
 
             WeatherAPIResponse temperatureResponse = response.getBody();
-            WeatherData temperature = new WeatherData(temperatureResponse.getDateGenerated(), temperatureResponse.getData());
-            return temperatureRepository.save(temperature);
+           // WeatherData temperature = new WeatherData(temperatureResponse.getDateGenerated(), temperatureResponse.getData());
+            //return temperatureRepository.save(temperature);
+            return temperatureResponse;
         } else {
             return null;
         }
