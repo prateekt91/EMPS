@@ -1,6 +1,6 @@
 package com.prat.apiintegrationservice.controller;
 
-import com.prat.apiintegrationservice.model.Temperature;
+import com.prat.apiintegrationservice.model.WeatherData;
 import com.prat.apiintegrationservice.service.TempApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +16,9 @@ public class EnvironmentController {
     @Autowired
     TempApiService tempApiService;
 
-    @GetMapping("/temp")
-    public ResponseEntity<Temperature> getTempurature(@RequestParam double lat, @RequestParam double lon) {
-        Temperature response = tempApiService.getCurrentTempurature(lat, lon);
+    @GetMapping("/getdata")
+    public ResponseEntity<WeatherData> getWeatherDataForLocation(@RequestParam double lat, @RequestParam double lon) {
+        WeatherData response = tempApiService.getTemperatureFromService(lat, lon);
         return ResponseEntity.ok(response);
     }
 }

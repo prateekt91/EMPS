@@ -1,8 +1,8 @@
 package com.prat.apiintegrationservice.repository;
 
-import com.prat.apiintegrationservice.model.Temperature;
+import com.prat.apiintegrationservice.model.WeatherData;
 
 public interface CustomTempRepo {
 
-    Temperature getLatestTemperature(double lat, double lon);
+    WeatherData getLatestTemperature(double lat, double lon);
 }

@@ -5,16 +5,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Document
-public class Temperature {
+@Document("weatherdata")
+public class WeatherData {
 
     @Id
     private String id;
     private String dateGenerated;
 
-    private List<TemperatureResponse.Data> data;
+    private List<WeatherAPIResponse.Data> data;
 
-    public Temperature(String dateGenerated, List<TemperatureResponse.Data> data) {
+    public WeatherData(String dateGenerated, List<WeatherAPIResponse.Data> data) {
         this.dateGenerated = dateGenerated;
         this.data = data;
     }
@@ -35,11 +35,11 @@ public class Temperature {
         this.dateGenerated = dateGenerated;
     }
 
-    public List<TemperatureResponse.Data> getData() {
+    public List<WeatherAPIResponse.Data> getData() {
         return data;
     }
 
-    public void setData(List<TemperatureResponse.Data> data) {
+    public void setData(List<WeatherAPIResponse.Data> data) {
         this.data = data;
     }
 

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.List;
 
-public class TemperatureResponse {
+public class WeatherAPIResponse {
 
     // [{"parameter":"t_2m:C","coordinates":[{"lat":13.081568,"lon":77.625137,"dates":[{"date":"2024-10-21T00:00:00Z","value":22.2}]}]}]
 
@@ -15,7 +15,7 @@ public class TemperatureResponse {
     private String status;
     private List<Data> data;
 
-    public TemperatureResponse() {
+    public WeatherAPIResponse() {
     }
 
     public static class Data {

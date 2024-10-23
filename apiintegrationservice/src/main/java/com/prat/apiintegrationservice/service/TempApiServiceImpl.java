@@ -1,7 +1,7 @@
 package com.prat.apiintegrationservice.service;
 
-import com.prat.apiintegrationservice.model.Temperature;
-import com.prat.apiintegrationservice.model.TemperatureResponse;
+import com.prat.apiintegrationservice.model.WeatherAPIResponse;
+import com.prat.apiintegrationservice.model.WeatherData;
 import com.prat.apiintegrationservice.repository.CustomTempRepo;
 import com.prat.apiintegrationservice.repository.TemperatureRepository;
 import org.slf4j.Logger;
@@ -40,12 +40,12 @@ public class TempApiServiceImpl implements TempApiService {
     private static final Logger log = LoggerFactory.getLogger(TempApiServiceImpl.class);
 
     @Override
-    public Temperature getCurrentTempurature(double lat, double lon) {
+    public WeatherData getCurrentTempurature(double lat, double lon) {
         return customTempRepo.getLatestTemperature(lat, lon);
     }
 
     @Override
-    public Temperature getTemperatureFromService(double lat, double lon) {
+    public WeatherData getTemperatureFromService(double lat, double lon) {
 
         String methodName = "TempApiServiceImpl.getTemperatureFromService";
         log.info("Inside method {} ", methodName);
@@ -54,16 +54,18 @@ public class TempApiServiceImpl implements TempApiService {
                 .setReadTimeout(Duration.ofSeconds(5))
                 .basicAuthentication(apiUserName, apiPassword)
                 .build();
-        String temperatureUrl = baseUrl + "/" + Instant.now().toString() + "/t_2m:C/" + lat + "," + lon + "/json";
+        String temperatureUrl = baseUrl + "/" + Instant.now().toString()
+                + "/t_2m:C,wind_speed_10m:ms,wind_dir_10m:d,wind_gusts_10m_1h:kmh,t_max_2m_24h:C,t_min_2m_24h:C,msl_pressure:hPa,precip_1h:mm,precip_24h:mm,uv:idx/"
+                + lat + "," + lon + "/json";
 
         log.info("Calling temp api with url: {}", temperatureUrl);
 
-        ResponseEntity<TemperatureResponse> response = restTemplate.exchange(temperatureUrl, HttpMethod.GET, null, TemperatureResponse.class);
+        ResponseEntity<WeatherAPIResponse> response = restTemplate.exchange(temperatureUrl, HttpMethod.GET, null, WeatherAPIResponse.class);
 
         if (null != response.getBody()) {
 
-            TemperatureResponse temperatureResponse = response.getBody();
-            Temperature temperature = new Temperature(temperatureResponse.getDateGenerated(), temperatureResponse.getData());
+            WeatherAPIResponse temperatureResponse = response.getBody();
+            WeatherData temperature = new WeatherData(temperatureResponse.getDateGenerated(), temperatureResponse.getData());
             return temperatureRepository.save(temperature);
         } else {
             return null;
